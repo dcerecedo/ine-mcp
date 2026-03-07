@@ -1,0 +1,8 @@
+services:
+  ine-mcp:
+    build: .
+    image: ine-mcp
+    container_name: ine-mcp
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
