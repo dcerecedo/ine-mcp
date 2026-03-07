@@ -29,7 +29,7 @@ from typing import Optional
 
 from mcp.server.fastmcp import FastMCP
 
-from .client import INEClient
+from ine_mcp.client import INEClient
 
 
 # ---------------------------------------------------------------------------
@@ -758,7 +758,23 @@ def _format_data_rows(rows: list) -> str:
 
 
 def main() -> None:
-    mcp.run()
+    import argparse
+    import os
+
+    parser = argparse.ArgumentParser(description="INE MCP Server")
+    parser.add_argument(
+        "--transport",
+        choices=["stdio", "sse", "streamable-http"],
+        default=os.environ.get("MCP_TRANSPORT", "stdio"),
+        help="Transport protocol (env: MCP_TRANSPORT)",
+    )
+    args = parser.parse_args()
+
+    if args.transport in ("sse", "streamable-http"):
+        mcp.settings.host = os.environ.get("MCP_HOST", "0.0.0.0")
+        mcp.settings.port = int(os.environ.get("MCP_PORT", "8000"))
+
+    mcp.run(transport=args.transport)
 
 
 if __name__ == "__main__":
