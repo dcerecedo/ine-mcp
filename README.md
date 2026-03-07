@@ -47,12 +47,44 @@ Operations  (statistical domains — IPC, EPA, Censo…)
 | `explore_topic` | Step-by-step plan to find data on any topic |
 | `get_latest_indicator` | Retrieve the latest published value for an indicator |
 
-## Quickstart
+## Setup
+
+### 1. Create a virtual environment
 
 ```bash
-pip install -e .
-ine-mcp          # runs on stdio (default MCP transport)
+python3 -m venv .venv
+source .venv/bin/activate  # on Windows: .venv\Scripts\activate
 ```
+
+### 2. Install dependencies
+
+Install the package with all development dependencies:
+
+```bash
+pip install -e ".[dev]"
+```
+
+### 3. Run the tests
+
+```bash
+pytest
+```
+
+### 4. Run the server
+
+**stdio transport** (default, for MCP clients):
+
+```bash
+ine-mcp
+```
+
+**SSE transport** (HTTP, port 8000):
+
+```bash
+MCP_TRANSPORT=sse ine-mcp
+```
+
+### 5. MCP client configuration
 
 Add to your MCP client config:
 
@@ -65,6 +97,34 @@ Add to your MCP client config:
   }
 }
 ```
+
+## Docker
+
+### Build the image
+
+```bash
+docker build -t ine-mcp .
+```
+
+### Run with Docker
+
+```bash
+docker run -p 8000:8000 ine-mcp
+```
+
+### Run with Docker Compose
+
+```bash
+docker compose up
+```
+
+To run in the background:
+
+```bash
+docker compose up -d
+```
+
+The server will be available at `http://localhost:8000`.
 
 ## API reference
 
